@@ -20,4 +20,4 @@ jobs:
       - name: Run tests
         run: |
           npm ci
-          npm run test
+          sudo npm run test
