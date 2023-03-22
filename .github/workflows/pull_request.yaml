@@ -17,12 +17,7 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name: See file structure
-        run: |
-          ls -la
-
       - name: Run tests
         run: |
           npm ci
-          ls -la
           sudo npm run test
