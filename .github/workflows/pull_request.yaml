@@ -6,9 +6,8 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  build:
+  run-tests:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -16,10 +15,9 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "14.x"
-
-      - name: Install dependencies
-        run: npm install
+          node-version: "18.x"
 
       - name: Run tests
-        run: npm run test
+        run: |
+          npm ci
+          sudo npm run test

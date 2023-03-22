@@ -3,7 +3,7 @@
     import Prism from 'prismjs';
     import * as joint from "jointjs";
     import { onMount } from "svelte";
-    import { CustomCloneButton, CustomLinkButton, CustomDeleteButton } from '../../utils/buttons';
+    import { CustomCloneButton, CustomDeleteButton, CustomLinkButton } from "../../utils/buttons";
     import { roleShape, databaseShape, schemaShape } from "../../utils/shapes";
     import { generateTerraformHCL } from "../../utils/generateHCL";
     import { parseDiagram } from "../../utils/parseDiagram";
@@ -11,24 +11,27 @@
     import '../../utils/buttons.js';
     import "prismjs/components/prism-sql.js"
     import "prismjs/components/prism-hcl.js"
-    
 
     let container: HTMLElement;
     let htmlOut = "...";
     let graph: joint.dia.Graph;
     
+    
     function createLink(this: joint.dia.ElementView) {
+      console.log(this)
       const link = new joint.shapes.standard.Link();
       link.source(this.model);
       link.target({ x: this.model.position().x + 100, y: this.model.position().y + 100 });
       link.addTo(this.model.graph);
     }
     
-    function editLabel(element: joint.dia.Element) {
-      const newText = prompt("Enter new label text:", element.attr("label/text"));
-    
+    function editLabel(element: joint.dia.ElementView) {
+      const newText = prompt("Enter new label text:", element.model.attr("label/text"));
       if (newText) {
-        element.attr("label/text", newText);
+        element.model.attr("label/text", newText);
+        const newLength = newText.length*12 < 100 ? 100 : newText.length*12;
+        element.model.resize(newLength, 40)
+        showTooling(element)
       }
     }
     
@@ -43,12 +46,34 @@
       this.model.remove();
     }
     
+    function showTooling(elementView: joint.dia.ElementView) {
+      const xOffset = elementView.model.attributes.size?.width;
+      const yOffset = elementView.model.attributes.size?.height;
+      const tools = new joint.dia.ToolsView({
+        tools: [
+          new CustomCloneButton({
+            offset: { x: 0, y: 0 },
+            action: createElement.bind(elementView),
+          }),
+          new CustomLinkButton({
+            offset: { x: 0, y: yOffset },
+            action: createLink.bind(elementView),
+          }),
+          new CustomDeleteButton({
+            offset: { x: xOffset, y: 0 },
+            action: deleteElement.bind(elementView),
+          }),
+        ],
+      });
+      elementView.addTools(tools);
+    }
+
     onMount(() => {
       graph = new joint.dia.Graph();
       const paper = new joint.dia.Paper({
         el: container,
         width: "100%",
-        height: "70vh",
+        height: "100vh",
         model: graph,
         gridSize: 10,
         drawGrid: true,
@@ -61,23 +86,8 @@
       });
     
       graph.addCells([roleShape.prop('type', "role"), databaseShape.prop('type', "database"), schemaShape.prop('type', "schema")]);
-    
-      paper.on("element:pointerdown", function (elementView) {
-        const tools = new joint.dia.ToolsView({
-          tools: [
-            new CustomCloneButton({
-              action: createElement.bind(elementView),
-            }),
-            new CustomLinkButton({
-              action: createLink.bind(elementView),
-            }),
-            new CustomDeleteButton({
-              action: deleteElement.bind(elementView),
-            }),
-          ],
-        });
-        elementView.addTools(tools);
-      });
+
+      paper.on("element:pointerdown", showTooling);
     
       paper.on("element:pointerup", function (elementView, evt) {
         const link = graph.getLinks().find((link) => link.getTargetElement() === null);
@@ -120,7 +130,7 @@
         });
     
         paper.on('element:pointerdblclick', (elementView: joint.dia.ElementView) => {
-          editLabel(elementView.model);
+          editLabel(elementView);
         });
     });
     
@@ -143,26 +153,71 @@
 </svelte:head>
 
 <style>
-  .diagramContainer {
-    width: 100%;
-    border: 1px
+  
+  .rbac-diagram button {
+    background-color: #66d7d1;
+    color: white;
+    padding: 0.5em 1em;
+    border: none;
+    border-radius: 4px;
+    margin: 0.5em;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
   }
-  .outputContainer {
-    height: 100%;
-    white-space: pre-wrap;
-    text-align: left;
-    padding: 2vw;
 
-    background-color: rgb(255, 255, 255);
+  .rbac-diagram button:hover {
+    background-color: #dbd56e;
   }
+  
+	.output {
+	  margin: 1em auto;
+    max-width: 1000px;
+	  background-color: white;
+	  border: 1px solid #ddd;
+	  padding: 1em;
+    white-space: pre-wrap;
+	}
+  
+	.how-to {
+	  margin: 1em auto;
+	  background-color: white;
+	  border: 1px solid #ddd;
+	  padding: 1em;
+	}
+  
+	.how-to h3 {
+	  margin-top: 0;
+	}
+  
+	.how-to p {
+	  margin-bottom: 0;
+	}
+  
 </style>
 
-<button on:click={generateAndShowHCL}>Generate Terraform HCL</button>
-<button on:click={generateAndShowSQL}>Generate SQL</button>
-<div class="diagramContainer" bind:this="{container}"></div>
-<div class="outputContainer">
-<h2> Output </h2>
-  <div>
-    {@html htmlOut}
-  </div>
+<div class="rbac-diagram">
+  <div class="how-to">
+	  <h3>How to use</h3>
+	  <p>
+		1. Click on any of the elements provided (role, database, and schema) and click the green plus to add a new element to the canvas.
+		<br>
+		2. Connect the elements by clicking on the "Link" button (arrow on bottom left) and dragging from one element to another.
+		<br>
+		3. Edit the label of an element by double-clicking on it.
+		<br>
+		4. Delete an element or link by clicking on the "Delete" button and then clicking on the element or link you want to delete.
+	  </p>
+	</div>
+	<div class="diagram-container" bind:this="{container}"></div>
+	<div class="buttons">
+	  <button on:click={generateAndShowHCL}>Generate Terraform HCL</button>
+	  <button on:click={generateAndShowSQL}>Generate SQL</button>
+	</div>
+	<div class="output">
+	  <h2>Output</h2>
+	  <div>{@html htmlOut}</div>
+	</div>
+	
 </div>
