@@ -7,10 +7,11 @@
     import { roleShape, databaseShape, schemaShape } from "../../utils/shapes";
     import { generateTerraformHCL } from "../../utils/generateHCL";
     import { parseDiagram } from "../../utils/parseDiagram";
-    import { generateSQLCommands } from "../../utils/generateSQL"
+    import { generateSQLCommands } from "../../utils/generateSQL";
+    import { validateDiagram } from "../../utils/validateDiagram";
     import '../../utils/buttons.js';
-    import "prismjs/components/prism-sql.js"
-    import "prismjs/components/prism-hcl.js"
+    import "prismjs/components/prism-sql.js";
+    import "prismjs/components/prism-hcl.js";
 
     let container: HTMLElement;
     let htmlOut = "...";
@@ -18,7 +19,6 @@
     
     
     function createLink(this: joint.dia.ElementView) {
-      console.log(this)
       const link = new joint.shapes.standard.Link();
       link.source(this.model);
       link.target({ x: this.model.position().x + 100, y: this.model.position().y + 100 });
@@ -136,14 +136,24 @@
     
     function generateAndShowHCL() {
       const diagramData = parseDiagram(graph);
-      const hcl = generateTerraformHCL(diagramData);
-      htmlOut = Prism.highlight(hcl, Prism.languages.hcl, 'hcl');      
+      const errors = validateDiagram(diagramData);
+      if (errors) {
+        alert(`Can't generate HCL:\n ${errors}`)
+      } else {
+        const hcl = generateTerraformHCL(diagramData);
+        htmlOut = Prism.highlight(hcl, Prism.languages.hcl, 'hcl');      
+      }
     }
     
     function generateAndShowSQL() {
       const diagramData = parseDiagram(graph);
-      const sql = generateSQLCommands(diagramData);
-      htmlOut = Prism.highlight(sql, Prism.languages.sql, 'sql');
+      const errors = validateDiagram(diagramData);
+      if (errors) {
+        alert(`Can't generate SQL:\n ${errors}`)
+      } else {
+        const sql = generateSQLCommands(diagramData);
+        htmlOut = Prism.highlight(sql, Prism.languages.sql, 'sql');
+      }
     }
     
 </script>

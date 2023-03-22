@@ -1,12 +1,12 @@
 import type { dia } from "jointjs";
 
-interface ParsedElement {
+export interface ParsedElement {
   id: string;
   type: string;
   name: string;
 }
 
-interface ParsedLink {
+export interface ParsedLink {
   id: string;
   sourceId: string | undefined;
   targetId: string | undefined;
