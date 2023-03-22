@@ -2,7 +2,7 @@ import type { ParsedDiagram } from "../types";
 
 export function generateSQLCommands(parsedDiagram: ParsedDiagram): string {
   const { elements, links } = parsedDiagram;
-
+  console.log(parsedDiagram);
   const createRoleCommands = elements
     .filter((element) => element.type === "role")
     .map((element) => `CREATE ROLE IF NOT EXISTS "${element.name}";`);
