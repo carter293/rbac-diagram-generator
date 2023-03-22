@@ -4,15 +4,6 @@
 	import ScrollButton from "../components/ScrollButton.svelte";
   </script>
   
-  <!-- <style>
-	main {
-	  text-align: center;
-	  padding: 1em;
-	  max-width: 100%;
-	  margin: 0 auto;
-	}
-  </style>
-   -->
   <style>
 	* {
 	  box-sizing: border-box;

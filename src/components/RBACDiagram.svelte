@@ -197,23 +197,6 @@
   
 </style>
 
-<!-- <div class="diagramContainer" bind:this="{container}"></div>
-<button on:click={generateAndShowHCL}>Generate Terraform HCL</button>
-<button on:click={generateAndShowSQL}>Generate SQL</button>
-<div class="outputContainer">
-<h2> Output </h2>
-  <div>
-    {@html htmlOut}
-  </div>
-</div>
-<div class='howTo'>
-  <h3> How to use </h3>
-<p>1. Clicking on any of the elements provided (role, database, and schema) and click the green plus add a new element to the canvas.
-2. Connecting the elements by clicking on the "Link" button (arrow on bottom left) and dragging from one element to another.
-3. Editing the label of an element by double-clicking on it.
-4. Deleting an element or link by clicking on the "Delete" button and then clicking on the element or link you want to delete.</p>
-</div>  -->
-
 <div class="rbac-diagram">
   <div class="how-to">
 	  <h3>How to use</h3>
