@@ -17,7 +17,12 @@ jobs:
         with:
           node-version: "14.x"
 
+      - name: See file structure
+        run: |
+          ls -la
+          ls -la src
+
       - name: Run tests
         run: |
           npm ci
-          npm run test
+          sudo npm run test
