@@ -28,7 +28,6 @@ export function parseDiagram(graph: dia.Graph): {
     const id = <string>element.id;
     const name: string = element.attr("label/text");
     const type: string = element.attributes.props?.type;
-    console.log("This one: ", element.attributes);
     return {
       id,
       type,

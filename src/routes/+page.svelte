@@ -1,39 +1,36 @@
 <!-- App.svelte -->
 <script lang="ts">
-	import RBACDiagram from "../components/RBACDiagram.svelte";
-	import ScrollButton from "../components/ScrollButton.svelte";
-  </script>
-  
-  <style>
-	* {
-	  box-sizing: border-box;
-	}
+  import RBACDiagram from "../components/RBACDiagram.svelte";
+  import ScrollButton from "../components/ScrollButton.svelte";
+</script>
 
-  
-	.container {
-	  display: flex;
-	  flex-direction: column;
-	  min-height: 100vh;
-		background-color: #F2EFEA;
-	}
-  
-	.header {
-	  background-color: #fc7753;	
-	  color: white;
-	  padding: 1em;
-	  text-align: center;
-	}
-  </style>
-  
+<main>
+  <div class="container">
+    <div class="header">
+      <h1>RBAC Diagram</h1>
+    </div>
+    <RBACDiagram />
+  </div>
+  <ScrollButton />
+</main>
 
+<style>
+  * {
+    box-sizing: border-box;
+  }
 
-  
-  <main>
-	<div class="container">
-		<div class="header">
-			<h1>RBAC Diagram</h1>
-		</div>
-		<RBACDiagram />
-	</div>
-	<ScrollButton />
-  </main>
+  .container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #efe6dd;
+  }
+
+  .header {
+    background-color: #0b6e4f;
+    border-radius: 1em;
+    color: white;
+    padding: 1em;
+    text-align: center;
+  }
+</style>

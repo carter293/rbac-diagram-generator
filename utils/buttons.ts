@@ -9,7 +9,7 @@ export class CustomCloneButton extends joint.elementTools.Button {
           selector: "button",
           attributes: {
             r: 7,
-            fill: "#FF9800",
+            fill: "#10eb17",
           },
         },
         {
