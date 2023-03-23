@@ -9,9 +9,9 @@
     <div class="header">
       <h1>RBAC Diagram</h1>
     </div>
-    <!-- <RBACDiagram /> -->
+    <RBACDiagram />
   </div>
-  <ScrollButton />
+  <!-- <ScrollButton /> -->
 </main>
 
 <style>
