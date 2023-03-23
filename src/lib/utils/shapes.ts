@@ -1,4 +1,4 @@
-import * as joint from "jointjs";
+import joint from "jointjs";
 
 export const roleShape = joint.shapes.standard.Rectangle.define(
   "namespace.Role",
