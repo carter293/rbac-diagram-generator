@@ -8,6 +8,7 @@
     CustomDeleteButton,
     CustomLinkButton,
   } from "../../utils/buttons";
+  import { loadFromFile } from "../../utils/serialisation";
   import { roleShape, databaseShape, schemaShape } from "../../utils/shapes";
   import { generateTerraformHCL } from "../../utils/generateHCL";
   import { parseDiagram } from "../../utils/parseDiagram";
@@ -20,6 +21,7 @@
   let container: HTMLElement;
   let htmlOut = "...";
   let graph: joint.dia.Graph;
+  let fileInput: HTMLInputElement;
   const Link = joint.shapes.standard.Link.define("namespace.Link", {});
 
   function createLink(this: joint.dia.ElementView) {
@@ -78,6 +80,48 @@
     elementView.addTools(tools);
   }
 
+  function handleFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      loadFromFile(graph, input.files[0]);
+    }
+  }
+
+  function saveGraph() {
+    const graphJSON = graph.toJSON();
+    const graphData = JSON.stringify(graphJSON);
+    localStorage.setItem("savedRBACDiagram", graphData);
+  }
+
+  function downloadGraph() {
+    const graphJSON = graph.toJSON();
+    const graphData = JSON.stringify(graphJSON, null, 2);
+    const blob = new Blob([graphData], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "rbac-diagram.json";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
+  function uploadGraph() {
+    fileInput.click();
+  }
+
+  function resetGraph() {
+    graph.clear();
+    localStorage.removeItem("savedRBACDiagram");
+    const roleShapeElem = new roleShape();
+    const databaseShapeElem = new databaseShape();
+    const schemaShapeElem = new schemaShape();
+    databaseShapeElem.addTo(graph);
+    schemaShapeElem.addTo(graph);
+    roleShapeElem.addTo(graph);
+  }
+
   onMount(() => {
     window.joint = joint;
     graph = new joint.dia.Graph(
@@ -108,19 +152,13 @@
       },
     });
 
-    const roleShapeElem = new roleShape();
-    const databaseShapeElem = new databaseShape();
-    const schemaShapeElem = new schemaShape();
-
     const graphData = localStorage.getItem("savedRBACDiagram");
 
     if (graphData) {
       const graphJSON = JSON.parse(graphData);
       graph.fromJSON(graphJSON);
     } else {
-      databaseShapeElem.addTo(graph);
-      schemaShapeElem.addTo(graph);
-      roleShapeElem.addTo(graph);
+      resetGraph();
     }
 
     paper.on("element:pointerdown", showTooling);
@@ -182,6 +220,7 @@
   });
 
   function generateAndShowHCL() {
+    saveGraph();
     const diagramData = parseDiagram(graph);
     const errors = validateDiagram(diagramData);
     if (errors) {
@@ -193,6 +232,7 @@
   }
 
   function generateAndShowSQL() {
+    saveGraph();
     const diagramData = parseDiagram(graph);
     const errors = validateDiagram(diagramData);
     if (errors) {
@@ -200,66 +240,6 @@
     } else {
       const sql = generateSQLCommands(diagramData);
       htmlOut = Prism.highlight(sql, Prism.languages.sql, "sql");
-    }
-  }
-
-  function saveGraph() {
-    const graphJSON = graph.toJSON();
-    const graphData = JSON.stringify(graphJSON);
-    localStorage.setItem("savedRBACDiagram", graphData);
-  }
-
-  function downloadGraph() {
-    const graphJSON = graph.toJSON();
-    const graphData = JSON.stringify(graphJSON, null, 2);
-    const blob = new Blob([graphData], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "rbac-diagram.json";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }
-
-  let fileInput: HTMLInputElement;
-
-  function uploadGraph() {
-    fileInput.click();
-  }
-
-  async function loadFromFile(file: File | null) {
-    if (!file) {
-      console.error("No file provided");
-      return;
-    }
-
-    try {
-      const fileReader = new FileReader();
-
-      fileReader.onload = (event) => {
-        if (event.target && event.target.result) {
-          const graphData = event.target.result as string;
-          let graphJSON = JSON.parse(graphData);
-          graph.fromJSON(graphJSON);
-        }
-      };
-
-      fileReader.onerror = (error) => {
-        console.error("FileReader error:", error);
-      };
-
-      fileReader.readAsText(file);
-    } catch (error) {
-      console.error("Error while loading diagram from file:", error);
-    }
-  }
-
-  function handleFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files) {
-      loadFromFile(input.files[0]);
     }
   }
 </script>
@@ -289,9 +269,7 @@
   </div>
   <div class="diagram-container" bind:this={container} />
   <div class="buttons">
-    <button on:click={generateAndShowHCL}>Generate Terraform HCL</button>
-    <button on:click={generateAndShowSQL}>Generate SQL</button>
-    <br />
+    <button on:click={resetGraph}>Reset Graph</button>
     <button on:click={uploadGraph}>Upload Diagram</button>
     <button on:click={downloadGraph}>Download Diagram</button>
     <input
@@ -302,6 +280,12 @@
     />
   </div>
   <div class="output">
+    <button style="background-color: #7b01a0;" on:click={generateAndShowHCL}
+      >Generate Terraform HCL</button
+    >
+    <button style="background-color: #055f0d;" on:click={generateAndShowSQL}
+      >Generate SQL</button
+    >
     <h2>Output</h2>
     <div>{@html htmlOut}</div>
   </div>
@@ -309,7 +293,7 @@
 
 <style>
   .rbac-diagram button {
-    background-color: #66d7d1;
+    background-color: #052f5f;
     color: white;
     padding: 0.5em 1em;
     border: none;
@@ -322,7 +306,8 @@
   }
 
   .rbac-diagram button:hover {
-    background-color: #dbd56e;
+    background-color: #ff5714;
+    color: white;
   }
 
   .output {
@@ -336,9 +321,10 @@
 
   .how-to {
     margin: 1em auto;
-    background-color: white;
-    border: 1px solid #ddd;
+    background-color: #052f5f;
+    color: white;
     padding: 1em;
+    border-radius: 1em;
   }
 
   .how-to h3 {

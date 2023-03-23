@@ -43,7 +43,7 @@ resource "snowflake_role" "${element.name}" {
       return databaseName
         ? `
 resource "snowflake_schema" "${element.name}" {
-  database = "${databaseName}"
+  database = snowflake_database.${databaseName}.name
   name     = "${element.name}"
 }`.trim()
         : `# Can't make schema resource for ${element.name} because it's not associated with a database`;
@@ -83,7 +83,7 @@ resource "snowflake_schema" "${element.name}" {
       const roleNames: string = roleIds
         .map((roleId) => {
           const role = elements.find((element) => element.id === roleId);
-          return role ? `"${role.name}"` : "";
+          return role ? `snowflake_role.${role.name}.name` : "";
         })
         .filter((roleName) => roleName)
         .join(", ");
@@ -91,15 +91,15 @@ resource "snowflake_schema" "${element.name}" {
       return databaseName
         ? `
 resource "snowflake_schema_grant" "${schemaName}_grant" {
-  database_name = "${databaseName}"
-  schema_name   = "${schemaName}"
+  database_name = snowflake_database.${databaseName}.name
+  schema_name   = snowflake_schema.${schemaName}.name
   privilege = "USAGE"
   roles     = [${roleNames}]
   enable_multiple_grants = true
 }
 
 resource "snowflake_database_grant" "${databaseName}_grant" {
-  database_name = "${databaseName}"
+  database_name = snowflake_database.${databaseName}.name
   privilege = "USAGE"
   roles     = [${roleNames}]
   enable_multiple_grants = true
