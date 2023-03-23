@@ -8,7 +8,6 @@ import type {
 
 export function generateTerraformHCL(parsedDiagram: ParsedDiagram): string {
   const { elements, links } = parsedDiagram;
-
   const roleResources = elements
     .filter((element) => element.type === "role")
     .map((element) =>
