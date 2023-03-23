@@ -1,4 +1,4 @@
-import * as joint from "jointjs";
+import joint from "jointjs";
 
 export class CustomCloneButton extends joint.elementTools.Button {
   constructor(options: joint.elementTools.Button.Options) {

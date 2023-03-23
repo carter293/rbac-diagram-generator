@@ -1,7 +1,6 @@
 <!-- RBACDiagram.svelte -->
 <script lang="ts">
   import Prism from "prismjs";
-  import * as joint from "jointjs";
   import { onMount } from "svelte";
   import {
     CustomCloneButton,
@@ -17,6 +16,7 @@
   import "../utils/buttons.js";
   import "prismjs/components/prism-sql.js";
   import "prismjs/components/prism-hcl.js";
+  import joint from "jointjs";
 
   let container: HTMLElement;
   let htmlOut = "...";

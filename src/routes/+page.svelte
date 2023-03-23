@@ -11,7 +11,7 @@
     </div>
     <RBACDiagram />
   </div>
-  <!-- <ScrollButton /> -->
+  <ScrollButton />
 </main>
 
 <style>
