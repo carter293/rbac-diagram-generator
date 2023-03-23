@@ -1,5 +1,6 @@
 import { parseDiagram } from "../utils/parseDiagram";
 import { dia } from "jointjs";
+
 describe("parseDiagram", () => {
   const graph = new dia.Graph();
   const element1 = new dia.Element({
@@ -10,6 +11,9 @@ describe("parseDiagram", () => {
         text: "Role 1",
       },
     },
+    props: {
+      type: "role",
+    },
   });
   const element2 = new dia.Element({
     id: "element2",
@@ -19,6 +23,9 @@ describe("parseDiagram", () => {
         text: "Schema 1",
       },
     },
+    props: {
+      type: "schema",
+    },
   });
   const element3 = new dia.Element({
     id: "element3",
@@ -27,6 +34,9 @@ describe("parseDiagram", () => {
       label: {
         text: "Database 1",
       },
+    },
+    props: {
+      type: "database",
     },
   });
   const link1 = new dia.Link({
@@ -96,6 +106,9 @@ describe("parseDiagram", () => {
         label: {
           text: "Role 2",
         },
+      },
+      props: {
+        type: "role",
       },
     });
     const link3 = new dia.Link({
