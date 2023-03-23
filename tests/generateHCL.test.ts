@@ -85,12 +85,12 @@ resource "snowflake_database" "db2" {
 }
 
 resource "snowflake_schema" "schema1" {
-  database = "db1"
+  database = snowflake_database.db1.name
   name     = "schema1"
 }
 
 resource "snowflake_schema" "schema2" {
-  database = "db1"
+  database = snowflake_database.db1.name
   name     = "schema2"
 }
 `;
