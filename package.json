@@ -33,6 +33,7 @@
   "type": "module",
   "dependencies": {
     "@rollup/plugin-typescript": "^11.0.0",
+    "@sveltejs/adapter-vercel": "^2.4.0",
     "jest-transform-svelte": "^2.1.1",
     "jointjs": "^3.6.5",
     "prismjs": "^1.29.0"
