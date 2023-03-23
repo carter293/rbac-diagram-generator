@@ -1,7 +1,6 @@
-import joint from "jointjs";
-
-export class CustomCloneButton extends joint.elementTools.Button {
-  constructor(options: joint.elementTools.Button.Options) {
+import { g, dia, shapes, connectors, elementTools } from "jointjs";
+export class CustomCloneButton extends elementTools.Button {
+  constructor(options: elementTools.Button.Options) {
     super({
       markup: [
         {
@@ -28,8 +27,8 @@ export class CustomCloneButton extends joint.elementTools.Button {
   }
 }
 
-export class CustomLinkButton extends joint.elementTools.Button {
-  constructor(options: joint.elementTools.Button.Options) {
+export class CustomLinkButton extends elementTools.Button {
+  constructor(options: elementTools.Button.Options) {
     super({
       offset: options.offset ?? { x: 0, y: 40 },
       markup: [
@@ -57,8 +56,8 @@ export class CustomLinkButton extends joint.elementTools.Button {
   }
 }
 
-export class CustomDeleteButton extends joint.elementTools.Button {
-  constructor(options: joint.elementTools.Button.Options) {
+export class CustomDeleteButton extends elementTools.Button {
+  constructor(options: elementTools.Button.Options) {
     super({
       offset: options.offset ?? { x: 100, y: 0 },
       markup: [

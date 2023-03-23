@@ -16,15 +16,15 @@
   import "../utils/buttons.js";
   import "prismjs/components/prism-sql.js";
   import "prismjs/components/prism-hcl.js";
-  import joint from "jointjs";
+  import { dia, shapes, linkTools } from "jointjs";
 
   let container: HTMLElement;
   let htmlOut = "...";
-  let graph: joint.dia.Graph;
+  let graph: dia.Graph;
   let fileInput: HTMLInputElement;
-  const Link = joint.shapes.standard.Link.define("namespace.Link", {});
+  const Link = shapes.standard.Link.define("namespace.Link", {});
 
-  function createLink(this: joint.dia.ElementView) {
+  function createLink(this: dia.ElementView) {
     const link = new Link();
     link.source(this.model);
     link.target({
@@ -34,7 +34,7 @@
     link.addTo(this.model.graph);
   }
 
-  function editLabel(element: joint.dia.ElementView) {
+  function editLabel(element: dia.ElementView) {
     const newText = prompt(
       "Enter new label text:",
       element.model.attr("label/text")
@@ -47,21 +47,21 @@
     }
   }
 
-  function createElement(this: joint.dia.ElementView) {
+  function createElement(this: dia.ElementView) {
     const element = this.model.clone();
     const { x, y } = this.model.attributes.position ?? { x: 0, y: 0 };
     element.attributes.position = { x: x + 150, y };
     this.model.graph.addCell(element);
   }
 
-  function deleteElement(this: joint.dia.ElementView) {
+  function deleteElement(this: dia.ElementView) {
     this.model.remove();
   }
 
-  function showTooling(elementView: joint.dia.ElementView) {
+  function showTooling(elementView: dia.ElementView) {
     const xOffset = elementView.model.attributes.size?.width;
     const yOffset = elementView.model.attributes.size?.height;
-    const tools = new joint.dia.ToolsView({
+    const tools = new dia.ToolsView({
       tools: [
         new CustomCloneButton({
           offset: { x: 0, y: 0 },
@@ -123,8 +123,7 @@
   }
 
   onMount(() => {
-    window.joint = joint;
-    graph = new joint.dia.Graph(
+    graph = new dia.Graph(
       {},
       {
         cellNamespace: {
@@ -137,7 +136,7 @@
         },
       }
     );
-    const paper = new joint.dia.Paper({
+    const paper = new dia.Paper({
       el: container,
       width: "100%",
       height: "100vh",
@@ -176,19 +175,19 @@
       paper.removeTools();
     });
 
-    let currentLink: joint.dia.LinkView | null = null;
+    let currentLink: dia.LinkView | null = null;
 
     paper.on("cell:pointerdown", (cellView, evt) => {
       if (cellView.model.isLink()) {
-        if (cellView instanceof joint.dia.LinkView) {
+        if (cellView instanceof dia.LinkView) {
           cellView.addTools(
-            new joint.dia.ToolsView({
+            new dia.ToolsView({
               tools: [
-                new joint.linkTools.Vertices(),
-                new joint.linkTools.SourceArrowhead(),
-                new joint.linkTools.TargetArrowhead(),
-                new joint.linkTools.Segments(),
-                new joint.linkTools.Remove({ distance: 20 }),
+                new linkTools.Vertices(),
+                new linkTools.SourceArrowhead(),
+                new linkTools.TargetArrowhead(),
+                new linkTools.Segments(),
+                new linkTools.Remove({ distance: 20 }),
               ],
             })
           );
@@ -207,12 +206,9 @@
       }
     });
 
-    paper.on(
-      "element:pointerdblclick",
-      (elementView: joint.dia.ElementView) => {
-        editLabel(elementView);
-      }
-    );
+    paper.on("element:pointerdblclick", (elementView: dia.ElementView) => {
+      editLabel(elementView);
+    });
 
     if (typeof window !== "undefined") {
       window.addEventListener("beforeunload", saveGraph);

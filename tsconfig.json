@@ -12,6 +12,7 @@
 		"target": "es5",
 		"module": "esnext",
 		"preserveValueImports": true,
+		"allowSyntheticDefaultImports": true
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias
 	//

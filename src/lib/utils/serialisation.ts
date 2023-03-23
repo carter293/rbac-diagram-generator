@@ -1,4 +1,3 @@
-import joint from "jointjs";
 import type { dia } from "jointjs";
 
 export async function loadFromFile(graph: dia.Graph, file: File | null) {
