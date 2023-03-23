@@ -1,5 +1,5 @@
 export {
-  CustomEditButton,
+  CustomCloneButton,
   CustomLinkButton,
   CustomDeleteButton,
 } from "./buttons";
