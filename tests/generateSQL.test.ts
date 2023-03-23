@@ -1,5 +1,5 @@
-import { generateSQLCommands } from "../utils/generateSQL";
-import type { ParsedDiagram } from "../types";
+import { generateSQLCommands } from "../src/lib/utils/generateSQL";
+import type { ParsedDiagram } from "../src/lib/types";
 
 describe("generateSQLCommands", () => {
   test("should create a SQL command for each role in the diagram", () => {

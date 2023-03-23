@@ -1,4 +1,4 @@
-import { generateTerraformHCL } from "../utils/generateHCL";
+import { generateTerraformHCL } from "../src/lib/utils/generateHCL";
 
 describe("generateTerraformHCL", () => {
   test("should create a resource for each role in the diagram", () => {

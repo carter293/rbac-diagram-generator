@@ -1,5 +1,5 @@
-import { validateDiagram } from "../utils/validateDiagram";
-import type { ParsedElement, ParsedLink } from "../utils/parseDiagram";
+import { validateDiagram } from "../src/lib/utils/validateDiagram";
+import type { ParsedElement, ParsedLink } from "../src/lib/utils/parseDiagram";
 
 describe("validateDiagram", () => {
   test("should not return any errors for a valid diagram", () => {

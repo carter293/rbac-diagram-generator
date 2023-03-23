@@ -7,14 +7,14 @@
     CustomCloneButton,
     CustomDeleteButton,
     CustomLinkButton,
-  } from "../../utils/buttons";
-  import { loadFromFile } from "../../utils/serialisation";
-  import { roleShape, databaseShape, schemaShape } from "../../utils/shapes";
-  import { generateTerraformHCL } from "../../utils/generateHCL";
-  import { parseDiagram } from "../../utils/parseDiagram";
-  import { generateSQLCommands } from "../../utils/generateSQL";
-  import { validateDiagram } from "../../utils/validateDiagram";
-  import "../../utils/buttons.js";
+  } from "../utils/buttons";
+  import { loadFromFile } from "../utils/serialisation";
+  import { roleShape, databaseShape, schemaShape } from "../utils/shapes";
+  import { generateTerraformHCL } from "../utils/generateHCL";
+  import { parseDiagram } from "../utils/parseDiagram";
+  import { generateSQLCommands } from "../utils/generateSQL";
+  import { validateDiagram } from "../utils/validateDiagram";
+  import "../utils/buttons.js";
   import "prismjs/components/prism-sql.js";
   import "prismjs/components/prism-hcl.js";
 

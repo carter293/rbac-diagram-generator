@@ -1,4 +1,4 @@
-import { parseDiagram } from "../utils/parseDiagram";
+import { parseDiagram } from "../src/lib/utils/parseDiagram";
 import { dia } from "jointjs";
 
 describe("parseDiagram", () => {

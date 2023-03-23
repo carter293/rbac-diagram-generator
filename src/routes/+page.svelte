@@ -1,7 +1,7 @@
 <!-- App.svelte -->
 <script lang="ts">
-  import RBACDiagram from "../components/RBACDiagram.svelte";
-  import ScrollButton from "../components/ScrollButton.svelte";
+  import RBACDiagram from "../lib/components/RBACDiagram.svelte";
+  import ScrollButton from "../lib/components/ScrollButton.svelte";
 </script>
 
 <main>
