@@ -27,8 +27,8 @@ export function parseDiagram(graph: dia.Graph): {
   const parsedElements: ParsedElement[] = elements.map((element) => {
     const id = <string>element.id;
     const name: string = element.attr("label/text");
-    const type: string = element.prop("type");
-
+    const type: string = element.attributes.props?.type;
+    console.log("This one: ", element.attributes);
     return {
       id,
       type,
@@ -43,8 +43,8 @@ export function parseDiagram(graph: dia.Graph): {
     const sourceId = <string>sourceElement?.id;
     const targetId = <string>targetElement?.id;
 
-    const sourceType = sourceElement?.prop("type");
-    const targetType = targetElement?.prop("type");
+    const sourceType = sourceElement?.attributes.props?.type;
+    const targetType = targetElement?.attributes.props?.type;
 
     const sourceName = sourceElement?.attr("label/text");
     const targetName = targetElement?.attr("label/text");
