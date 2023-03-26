@@ -2,6 +2,9 @@
 
 This web application allows you to create Role-Based Access Control (RBAC) diagrams using JointJS and SvelteKit. You can easily create, connect, and delete elements, and generate Terraform HCL or SQL commands based on your diagram.
 
+![Diagram](/readme-images/rbac.png)
+![ SQL Output ](/readme-images/sql-output.png)
+
 ### Installation
 
 To use this application locally, follow these steps:
